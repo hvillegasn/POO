@@ -25,10 +25,7 @@ public class DeveloperDAO extends DAO<Developer> {
         Developer dev = new Developer();
         try {
             ResultSet result = this.connect
-                    .createStatement(
-                            ResultSet.TYPE_SCROLL_INSENSITIVE,
-                            ResultSet.CONCUR_READ_ONLY
-                    ).executeQuery(
+                    .createStatement().executeQuery(
                             "SELECT * FROM developer WHERE dev_id = " + id
                     );
             if (result.first()) {
@@ -50,36 +47,18 @@ public class DeveloperDAO extends DAO<Developer> {
     public Developer create(Developer obj) {
         
         try {
-            if (obj.getLanguage().getLan_id() == 0) {
-                DAO<Language> languageDAO = AbstractDAOFactory.getFactory(FactoryType.DAO_FACTORY).getLanguageDAO();
-                
-                obj.setLanguage(languageDAO.create(obj.getLanguage()));
-                System.out.println("id lan dentro del if=="+obj.getLanguage().getLan_id());
-                System.out.println("Nombre La="+obj.getLanguage().getLan_name());
-            }
-
+            
             PreparedStatement prepare = this.connect
                     .prepareStatement(
-                            "INSERT INTO developer (dev_name, dev_lastname, dev_lanid)"
-                            + "VALUES(?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS
-                    );
-            
-            prepare.setString(1, obj.getDev_name());
-            prepare.setString(2, obj.getDev_lastname());
-            prepare.setInt(3, obj.getLanguage().getLan_id());
-
-            System.out.println("name=="+obj.getDev_name());
-            System.out.println("id lan=="+obj.getLanguage().getLan_id());
+                            "INSERT INTO developer (dev_id,dev_name, dev_lastname, dev_lanid)"
+                            + "VALUES(?,?, ?, ?)");
+            prepare.setInt(1, obj.getDev_id());
+            prepare.setString(2, obj.getDev_name());
+            prepare.setString(3, obj.getDev_lastname());
+            prepare.setInt(4, obj.getLanguage().getLan_id());
             
             prepare.executeUpdate();
-            ResultSet rs = prepare.getGeneratedKeys();
-            int id = 0;
-            if (rs.next()) {
-                id = rs.getInt("dev_id");
-            }
-            System.out.println("ID="+id);
-            
-            obj = this.find(id);
+            obj = this.find(obj.getDev_id());
 
         } catch (SQLException e) {
             e.printStackTrace();

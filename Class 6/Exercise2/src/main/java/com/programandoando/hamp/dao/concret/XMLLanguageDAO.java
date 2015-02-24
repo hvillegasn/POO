@@ -17,7 +17,7 @@ public class XMLLanguageDAO extends DAO<Language>{
 
     @Override
     public Language find(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new Language(1, "Desde XML");
     }
 
     @Override

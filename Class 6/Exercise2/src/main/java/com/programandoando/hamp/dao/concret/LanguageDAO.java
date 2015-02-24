@@ -41,18 +41,13 @@ public class LanguageDAO extends DAO<Language> {
     public Language create(Language obj) {
         try {
             PreparedStatement prepare = this.connect
-                    .prepareStatement("INSERT INTO language (lan_name) VALUES( ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+                    .prepareStatement("INSERT INTO language (lan_id,lan_name) VALUES( ?,?)");
             
-            prepare.setString(1, obj.getLan_name());                      
+            prepare.setInt(1, obj.getLan_id());                      
+            prepare.setString(2, obj.getLan_name());                      
             
             prepare.executeUpdate();
-            ResultSet rs = prepare.getGeneratedKeys();
-            int id=0;
-            if (rs.next()) {
-                id = rs.getInt("lan_id");
-            }
-            System.out.println("lan_id="+id);
-            obj = this.find(id);
+            obj = this.find(obj.getLan_id());
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,10 +61,7 @@ public class LanguageDAO extends DAO<Language> {
         try {
 
             this.connect
-                    .createStatement(
-                            ResultSet.TYPE_SCROLL_INSENSITIVE,
-                            ResultSet.CONCUR_UPDATABLE
-                    ).executeUpdate(
+                    .createStatement().executeUpdate(
                             "UPDATE language SET lan_name = '" + obj.getLan_name() + "'"
                             + " WHERE lan_id = " + obj.getLan_id()
                     );
@@ -87,10 +79,7 @@ public class LanguageDAO extends DAO<Language> {
         try {
 
             this.connect
-                    .createStatement(
-                            ResultSet.TYPE_SCROLL_INSENSITIVE,
-                            ResultSet.CONCUR_UPDATABLE
-                    ).executeUpdate(
+                    .createStatement().executeUpdate(
                             "DELETE FROM language WHERE lan_id = " + obj.getLan_id()
                     );
 

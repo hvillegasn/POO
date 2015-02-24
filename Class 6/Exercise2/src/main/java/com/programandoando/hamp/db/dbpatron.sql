@@ -1,13 +1,13 @@
 
 CREATE TABLE `language` (
-  `lan_id` int(11) NOT NULL AUTO_INCREMENT,
+  `lan_id` int(11) NOT NULL,
   `lan_name` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`lan_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
 
 
 CREATE TABLE `developer` (
-  `dev_id` int(11) NOT NULL AUTO_INCREMENT,
+  `dev_id` int(11) NOT NULL,
   `dev_name` varchar(45) DEFAULT NULL,
   `dev_lastname` varchar(45) DEFAULT NULL,
   `dev_lanid` int(11) DEFAULT NULL,
